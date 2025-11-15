@@ -4,7 +4,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/charliermarsh/ruff)
 
-An educational implementation of a GPT-style Large Language Model built from scratch with software engineering best practices and comprehensive educational materials.
+An educational implementation of a GPT-style Large Language Model built from scratch.
 
 ## Features
 
@@ -261,7 +261,6 @@ If you use this code for educational purposes, please cite:
 
 ## Acknowledgments
 
-- Inspired by Andrej Karpathy's educational content
 - Based on the GPT-2 architecture
 - Built with PyTorch
 - Visualizations powered by Matplotlib, Plotly, and Seaborn
