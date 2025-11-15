@@ -9,6 +9,7 @@ from .attention import (
 from .config import ModelConfig, TrainingConfig
 from .model import GPTModel
 from .tokenizer import Tokenizer
+from .trainer import Trainer
 from .transformer import FeedForward, TransformerBlock
 
 __all__ = [
@@ -22,6 +23,7 @@ __all__ = [
     "TransformerBlock",
     "FeedForward",
     "GPTModel",
+    "Trainer",
 ]
 
 # For type checking compatibility
