@@ -7,6 +7,7 @@ from .attention import (
     create_padding_mask,
 )
 from .config import ModelConfig, TrainingConfig
+from .model import GPTModel
 from .tokenizer import Tokenizer
 from .transformer import FeedForward, TransformerBlock
 
@@ -20,6 +21,7 @@ __all__ = [
     "combine_masks",
     "TransformerBlock",
     "FeedForward",
+    "GPTModel",
 ]
 
 # For type checking compatibility
