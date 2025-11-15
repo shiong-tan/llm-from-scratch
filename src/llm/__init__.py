@@ -7,6 +7,7 @@ from .attention import (
     create_padding_mask,
 )
 from .config import ModelConfig, TrainingConfig
+from .generation import GenerationConfig, TextGenerator
 from .model import GPTModel
 from .tokenizer import Tokenizer
 from .trainer import Trainer
@@ -24,6 +25,8 @@ __all__ = [
     "FeedForward",
     "GPTModel",
     "Trainer",
+    "GenerationConfig",
+    "TextGenerator",
 ]
 
 # For type checking compatibility
