@@ -1,6 +1,6 @@
 # LLM from Scratch
 
-[![Tests](https://github.com/yourusername/llm-from-scratch/workflows/tests/badge.svg)](https://github.com/yourusername/llm-from-scratch/actions)
+[![Tests](https://github.com/shiong-tan/llm-from-scratch/workflows/CI/badge.svg)](https://github.com/shiong-tan/llm-from-scratch/actions)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/charliermarsh/ruff)
 
@@ -31,22 +31,24 @@ This implements a **decoder-only transformer** (GPT-style) with:
 
 ```
 ├── src/llm/              # Source code
-│   ├── config.py         # Model configuration
-│   ├── tokenizer.py      # Text tokenization
-│   ├── attention.py      # Attention mechanism
-│   ├── model.py          # Transformer model
-│   └── trainer.py        # Training loop
-├── tests/                # Unit tests
+│   ├── config.py         # Model and training configuration
+│   ├── tokenizer.py      # BPE tokenization with tiktoken
+│   ├── attention.py      # Multi-head self-attention
+│   ├── transformer.py    # Transformer blocks and feedforward
+│   ├── model.py          # Complete GPT model
+│   ├── trainer.py        # Training loop with gradient accumulation
+│   └── generation.py     # Text generation strategies
+├── tests/                # Comprehensive unit tests (92% coverage)
 ├── notebooks/            # Educational Jupyter notebooks
 │   ├── 01_tokenization.ipynb
 │   ├── 02_attention_mechanism.ipynb
 │   ├── 03_transformer_blocks.ipynb
-│   ├── 04_training_loop.ipynb
-│   └── 05_text_generation.ipynb
+│   ├── 04_complete_gpt_model.ipynb
+│   └── 05_training_and_generation.ipynb
 ├── examples/             # Example scripts
-│   ├── train.py         # Training script
-│   └── generate.py      # Text generation
-├── docs/                 # Documentation
+│   ├── train_simple.py   # Simple training example
+│   └── generate_simple.py # Text generation example
+├── data/samples/         # Sample training data
 └── .github/workflows/    # CI/CD pipelines
 ```
 
@@ -56,19 +58,18 @@ This implements a **decoder-only transformer** (GPT-style) with:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/llm-from-scratch.git
+git clone https://github.com/shiong-tan/llm-from-scratch.git
 cd llm-from-scratch
 
 # Create virtual environment
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# Install dependencies
-pip install -r requirements.txt
+# Install package in editable mode
+pip install -e "."
 
-# For development
-pip install -r requirements-dev.txt
-pre-commit install
+# For development (includes testing and linting tools)
+pip install -e ".[dev]"
 ```
 
 ### Learning Path with Notebooks
@@ -79,12 +80,12 @@ The best way to learn is through our interactive notebooks:
 # Launch JupyterLab
 jupyter lab
 
-# Navigate to notebooks/ and start with:
-# 01_tokenization.ipynb - Understanding BPE and tokenization
-# 02_attention_mechanism.ipynb - Visualizing attention patterns
-# 03_transformer_blocks.ipynb - Building transformer layers
-# 04_training_loop.ipynb - Training your first model
-# 05_text_generation.ipynb - Generating text with sampling strategies
+# Navigate to notebooks/ and follow the learning path:
+# 01_tokenization.ipynb - BPE encoding, vocabulary, special tokens
+# 02_attention_mechanism.ipynb - Multi-head attention, causal masking
+# 03_transformer_blocks.ipynb - Residual connections, layer norm, feedforward
+# 04_complete_gpt_model.ipynb - Embeddings, weight tying, complete architecture
+# 05_training_and_generation.ipynb - Training loop, sampling strategies, beam search
 ```
 
 Each notebook includes:
@@ -98,20 +99,27 @@ Each notebook includes:
 
 ```bash
 # Train a small model on sample data
-python examples/train.py --config examples/config_small.yaml
+python examples/train_simple.py
 
-# Monitor training with TensorBoard
-tensorboard --logdir logs/
+# The script will:
+# - Create a small GPT model
+# - Train on sample text data
+# - Save checkpoints to checkpoints/
+# - Display training progress with tqdm
 ```
 
 ### Text Generation
 
 ```bash
-# Generate text from a trained model
-python examples/generate.py \
-    --checkpoint checkpoints/model_best.pt \
-    --prompt "Once upon a time" \
-    --max_length 100
+# Generate text with different strategies
+python examples/generate_simple.py
+
+# The script demonstrates:
+# - Greedy decoding (deterministic)
+# - Temperature sampling
+# - Top-k and top-p sampling
+# - Beam search
+# - Repetition penalty
 ```
 
 ## Development
@@ -135,59 +143,59 @@ pytest tests/test_attention.py
 # Format code
 black src/ tests/ examples/
 
-# Format notebooks
-nbqa black notebooks/
+# Sort imports
+isort src/ tests/ examples/
 
 # Lint code
 ruff check src/ tests/ examples/
+flake8 src/ tests/ examples/
 
 # Type checking
 mypy src/
-```
 
-### Pre-commit Hooks
-
-Pre-commit hooks automatically run before each commit:
-
-```bash
-# Install hooks
-pre-commit install
-
-# Run manually
-pre-commit run --all-files
+# Security checks
+bandit -r src/
+safety check
 ```
 
 ## Educational Notebooks
 
 ### 01. Tokenization
-- How text is converted to numbers
-- BPE (Byte Pair Encoding) algorithm
-- Vocabulary building
-- Special tokens and padding
+- Understanding BPE (Byte Pair Encoding)
+- Vocabulary size trade-offs
+- Special tokens (BOS/EOS/PAD)
+- Hands-on with tiktoken tokenizer
+- Token-to-text conversion
 
 ### 02. Attention Mechanism
+- Scaled dot-product attention formula
+- Multi-head attention architecture
+- Causal masking for autoregressive models
+- Visualizing attention patterns
 - Query, Key, Value concepts
-- Scaled dot-product attention
-- Multi-head attention visualization
-- Attention pattern analysis
 
 ### 03. Transformer Blocks
+- Pre-norm vs post-norm architecture
+- Residual connections and gradient flow
 - Layer normalization
-- Residual connections
-- Feedforward networks
-- Complete transformer block assembly
+- Feedforward networks with GELU
+- Stacking blocks for deep models
 
-### 04. Training Loop
-- Loss calculation (cross-entropy)
-- Gradient descent optimization
-- Learning rate scheduling
-- Monitoring training metrics
+### 04. Complete GPT Model
+- Token and positional embeddings
+- Weight tying between embeddings and output
+- Scaled initialization for deep networks
+- Complete forward pass
+- Loss computation and perplexity
 
-### 05. Text Generation
-- Greedy decoding
-- Temperature sampling
-- Top-k and top-p (nucleus) sampling
-- Beam search
+### 05. Training and Generation
+- Training loop fundamentals
+- Learning rate warmup and cosine decay
+- Gradient accumulation
+- Multiple generation strategies:
+  - Greedy, sampling, top-k, top-p
+  - Beam search with length penalty
+  - Repetition penalty and n-gram blocking
 
 ## Model Configuration
 
@@ -237,8 +245,12 @@ Contributions are welcome! Please:
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes with tests
-4. Run pre-commit hooks (`pre-commit run --all-files`)
-5. Commit your changes
+4. Ensure code quality:
+   - Run tests: `pytest`
+   - Format code: `black src/ tests/ examples/`
+   - Check types: `mypy src/`
+   - Lint: `ruff check src/`
+5. Commit your changes with clear messages
 6. Push to the branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
 
@@ -252,10 +264,10 @@ If you use this code for educational purposes, please cite:
 
 ```bibtex
 @software{llm_from_scratch,
-  author = {Your Name},
+  author = {Shiong Tan},
   title = {LLM from Scratch: Educational GPT Implementation},
   year = {2025},
-  url = {https://github.com/yourusername/llm-from-scratch}
+  url = {https://github.com/shiong-tan/llm-from-scratch}
 }
 ```
 
