@@ -8,6 +8,7 @@ from .attention import (
 )
 from .config import ModelConfig, TrainingConfig
 from .tokenizer import Tokenizer
+from .transformer import FeedForward, TransformerBlock
 
 __all__ = [
     "ModelConfig",
@@ -17,6 +18,8 @@ __all__ = [
     "create_causal_mask",
     "create_padding_mask",
     "combine_masks",
+    "TransformerBlock",
+    "FeedForward",
 ]
 
 # For type checking compatibility
